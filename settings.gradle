@@ -1,0 +1,4 @@
+include ':gdx-backends-android'
+include ':spine-libgdx'
+include ':app'
+rootProject.name = "SpineSourceDemo"
