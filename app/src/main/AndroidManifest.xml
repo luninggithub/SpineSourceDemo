@@ -20,6 +20,9 @@
         <activity
             android:name=".activity.RaptorActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
+        <activity
+            android:name=".activity.LimiShowActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
 
     </application>
 

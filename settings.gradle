@@ -1,3 +1,4 @@
+include ':spine-libgdx3-7-94'
 include ':gdx-backends-android'
 include ':spine-libgdx'
 include ':app'

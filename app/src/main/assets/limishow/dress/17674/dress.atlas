@@ -1,0 +1,40 @@
+dress.png
+size: 79, 267
+format: RGBA4444
+filter: Linear,Linear
+repeat: none
+Forearm_Left
+  rotate: true
+  xy: 0, 172
+  size: 27, 76
+  orig: 27, 76
+  offset: 0, 0
+  index: 2
+Forearm_Right
+  rotate: true
+  xy: 0, 144
+  size: 28, 77
+  orig: 28, 77
+  offset: 0, 0
+  index: 1
+Tops
+  rotate: false
+  xy: 0, 0
+  size: 79, 144
+  orig: 79, 144
+  offset: 0, 0
+  index: 0
+Upperarm_Left
+  rotate: true
+  xy: 0, 199
+  size: 33, 75
+  orig: 33, 75
+  offset: 0, 0
+  index: 3
+Upperarm_Right
+  rotate: true
+  xy: 0, 232
+  size: 35, 75
+  orig: 35, 75
+  offset: 0, 0
+  index: 4

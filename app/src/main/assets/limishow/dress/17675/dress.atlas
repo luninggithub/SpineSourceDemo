@@ -1,0 +1,26 @@
+dress.png
+size: 102, 224
+format: RGBA4444
+filter: Linear,Linear
+repeat: none
+Pants_Front
+  rotate: false
+  xy: 0, 162
+  size: 79, 62
+  orig: 79, 62
+  offset: 0, 0
+  index: 2
+Pants_Left
+  rotate: false
+  xy: 54, 0
+  size: 48, 162
+  orig: 48, 162
+  offset: 0, 0
+  index: 1
+Pants_Right
+  rotate: false
+  xy: 0, 0
+  size: 54, 162
+  orig: 54, 162
+  offset: 0, 0
+  index: 0

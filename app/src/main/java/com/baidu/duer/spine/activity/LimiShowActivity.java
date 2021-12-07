@@ -11,61 +11,45 @@ import android.widget.Button;
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
 import com.baidu.duer.spine.R;
-import com.baidu.duer.spine.model.Raptor;
-import com.baidu.duer.spine.model.Raptor3794;
+import com.baidu.duer.spine.model.LimiShow2;
 
 
-public class RaptorActivity extends AndroidApplication {
+public class LimiShowActivity extends AndroidApplication {
 
-//    Raptor raptor;
-    Raptor3794 raptor;
-    View raptorView;
+    LimiShow2 limiShow;
+    View limiShowView;
 
-    Button btnWalk, btnRoar, btnJump;
+    Button btnMan, btnWoman;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_raptor);
-        btnWalk = (Button) findViewById(R.id.btn_walk);
-        btnWalk.setOnClickListener(vOnClickListener);
+        setContentView(R.layout.activity_limi_show);
 
-        btnRoar = (Button) findViewById(R.id.btn_roar);
-        btnRoar.setOnClickListener(vOnClickListener);
+        btnMan = (Button) findViewById(R.id.btn_man);
+        btnMan.setOnClickListener(vOnClickListener);
 
-        btnJump = (Button) findViewById(R.id.btn_jump);
-        btnJump.setOnClickListener(vOnClickListener);
+        btnWoman = (Button) findViewById(R.id.btn_woman);
+        btnWoman.setOnClickListener(vOnClickListener);
+
         AndroidApplicationConfiguration cfg = new AndroidApplicationConfiguration();
         cfg.r = cfg.g = cfg.b = cfg.a = 8;
-        raptor = new Raptor3794();
-        raptorView = initializeForView(raptor, cfg);
-        if (raptorView instanceof SurfaceView) {
-            SurfaceView glView = (SurfaceView) raptorView;
+        limiShow = new LimiShow2();
+        limiShowView = initializeForView(limiShow, cfg);
+        if (limiShowView instanceof SurfaceView) {
+            SurfaceView glView = (SurfaceView) limiShowView;
             glView.getHolder().setFormat(PixelFormat.TRANSLUCENT);
             glView.setZOrderOnTop(true);
         }
-        addRaptor();
+        addLimiShow();
     }
 
-    View.OnClickListener vOnClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            if (view == btnWalk) {
-//                raptor.setAnimate("walk");
-            } else if (view == btnRoar) {
-//                raptor.setAnimate("roar");
-            } else if (view == btnJump) {
-//                raptor.setAnimate("jump");
-            }
-        }
-    };
-
-    public void addRaptor() {
+    public void addLimiShow() {
         final WindowManager windowManager = getWindowManager();
         final WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
         layoutParams.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
 
-        raptorView.setOnTouchListener(new View.OnTouchListener() {
+        limiShowView.setOnTouchListener(new View.OnTouchListener() {
 
             float lastX, lastY;
 
@@ -79,21 +63,21 @@ public class RaptorActivity extends AndroidApplication {
                 } else if (action == MotionEvent.ACTION_MOVE) {
                     layoutParams.x += (int) (x - lastX);
                     layoutParams.y += (int) (y - lastY);
-                    windowManager.updateViewLayout(raptorView, layoutParams);
+                    windowManager.updateViewLayout(limiShowView, layoutParams);
                     lastX = x;
                     lastY = y;
                 } else if (action == MotionEvent.ACTION_UP || action == MotionEvent.ACTION_CANCEL) {
-//                    raptor.setAnimate("flying");
+
                 }
                 return true;
             }
         });
         layoutParams.type = WindowManager.LayoutParams.TYPE_APPLICATION;
         layoutParams.flags = 40;
-        layoutParams.width = dp2Px(900);
+        layoutParams.width = dp2Px(500);
         layoutParams.height = dp2Px(500);
         layoutParams.format = -3;
-        windowManager.addView(raptorView, layoutParams);
+        windowManager.addView(limiShowView, layoutParams);
     }
 
     public int dp2Px(float value) {
@@ -101,9 +85,15 @@ public class RaptorActivity extends AndroidApplication {
         return (int) (value * scale + 0.5f);
     }
 
+    View.OnClickListener vOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+        }
+    };
+
     @Override
     protected void onDestroy() {
-        getWindowManager().removeViewImmediate(raptorView);
+        getWindowManager().removeViewImmediate(limiShowView);
         super.onDestroy();
     }
 }

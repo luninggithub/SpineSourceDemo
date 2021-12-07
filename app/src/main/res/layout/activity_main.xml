@@ -20,6 +20,14 @@
             android:background="@android:color/holo_blue_light"
             android:text="Dragon"
             android:textColor="@android:color/white" />
+        <Button
+            android:id="@+id/btn_limi"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:background="@android:color/holo_blue_light"
+            android:text="limishow"
+            android:textColor="@android:color/white" />
 
     </LinearLayout>
 

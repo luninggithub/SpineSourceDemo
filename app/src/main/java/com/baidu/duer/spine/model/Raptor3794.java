@@ -2,6 +2,7 @@ package com.baidu.duer.spine.model;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -14,8 +15,7 @@ import com.esotericsoftware.spine.SkeletonJson;
 import com.esotericsoftware.spine.SkeletonRenderer;
 import com.esotericsoftware.spine.SkeletonRendererDebug;
 
-public class Raptor extends ApplicationAdapter {
-
+public class Raptor3794 extends ApplicationAdapter {
     OrthographicCamera camera;
     PolygonSpriteBatch batch;
     SkeletonRenderer renderer;
@@ -35,12 +35,10 @@ public class Raptor extends ApplicationAdapter {
         debugRenderer.setRegionAttachments(false);
         debugRenderer.setMeshHull(false);
 
-        atlas = new TextureAtlas(Gdx.files.internal("raptor/raptor-pma.atlas"));
-
-        SkeletonJson loader = new SkeletonJson(atlas); // This loads skeleton JSON data, which is stateless.
-        // SkeletonLoader loader = new SkeletonBinary(atlas); // Or use SkeletonBinary to load binary data.
-        loader.setScale(0.3f); // Load the skeleton at 50% the size it was in Spine.
-        SkeletonData skeletonData = loader.readSkeletonData(Gdx.files.internal("raptor/raptor-pro.json"));
+        atlas = new TextureAtlas(Gdx.files.internal("raptor3-7-94/raptor-pma.atlas"));
+        SkeletonJson json = new SkeletonJson(atlas); // This loads skeleton JSON data, which is stateless.
+        json.setScale(0.3f); // Load the skeleton at 50% the size it was in Spine.
+        SkeletonData skeletonData = json.readSkeletonData(Gdx.files.internal("raptor3-7-94/raptor-pro.json"));
 
         skeleton = new Skeleton(skeletonData); // Skeleton holds skeleton state (bone positions, slot attachments, etc).
         skeleton.setPosition(250, 20);
@@ -58,7 +56,7 @@ public class Raptor extends ApplicationAdapter {
     public void render () {
         state.update(Gdx.graphics.getDeltaTime()); // Update the animation time.
 
-        ScreenUtils.clear(0, 0, 0, 0);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         if (state.apply(skeleton)) // Poses skeleton using current animations. This sets the bones' local SRT.
             skeleton.updateWorldTransform(); // Uses the bones' local SRT to compute their world SRT.
@@ -81,9 +79,5 @@ public class Raptor extends ApplicationAdapter {
 
     public void dispose () {
         atlas.dispose();
-    }
-
-    public void setAnimate(String animate) {
-        state.addAnimation(0, animate, true, 0);
     }
 }

@@ -55,8 +55,9 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
-    implementation project(':spine-libgdx')
+//    implementation project(':spine-libgdx')
 //    implementation project(':gdx-backends-android')
+    implementation project(':spine-libgdx3-7-94')
     implementation "com.badlogicgames.gdx:gdx:1.10.0"
     implementation "com.badlogicgames.gdx:gdx-backend-android:1.10.0"
 }
