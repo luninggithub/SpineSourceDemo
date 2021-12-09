@@ -29,8 +29,6 @@
 
 package com.esotericsoftware.spine;
 
-import android.util.Log;
-
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -111,6 +109,12 @@ public class SkeletonJson {
 		return new JsonReader().parse(file);
 	}
 
+	/**
+	 * 整合多素材资源，实例化attachement插入skin的slot中
+	 * @param skelData
+	 * @param skinMap
+	 * @return
+	 */
 	public List<Dress> updateAttachment(SkeletonData skelData, JsonValue skinMap) {
 		List<Dress> dataList = new ArrayList<>();
 		Array<Skin> skins = skelData.getSkins();
@@ -122,16 +126,13 @@ public class SkeletonJson {
 		}
 		Skin skin = defaultSkins.get(0);
 		for (JsonValue slotEntry = skinMap.child; slotEntry != null; slotEntry = slotEntry.next) {
-			Log.i("SPINE-SkeletonJson", "Attachments0 name is:" + slotEntry.name);
 			SlotData slotData = skelData.findSlot(slotEntry.name);
 			if (slotData == null) {
-				Log.i("SPINE-SkeletonJson", "Slot not found:" + slotEntry.name);
 				throw new SerializationException("Slot not found: " + slotEntry.name);
 			}
 			int index = slotData.index;
 			String attachName = null;
 			for (JsonValue entry = slotEntry.child; entry != null; entry = entry.next) {
-				Log.i("SPINE-SkeletonJson",  "Attachments1 name is:" + entry.name);
 				if (attachName == null) {
 					attachName = entry.name;
 				}
@@ -140,7 +141,6 @@ public class SkeletonJson {
 				}
 				Attachment att = readAttachment(entry, skin, index, entry.name, skelData);
 				if (att != null) {
-					Log.i("SPINE-SkeletonJson",  "Attachment is:" + att.getClass().getName() + "; " + att.toString());
 					skin.addAttachment(index, entry.name, att);
 				}
 			}
