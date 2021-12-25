@@ -43,6 +43,9 @@ import com.esotericsoftware.spine.attachments.MeshAttachment;
 import com.esotericsoftware.spine.attachments.PathAttachment;
 import com.esotericsoftware.spine.attachments.RegionAttachment;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /** Stores the current pose for a skeleton.
  * <p>
  * See <a href="http://esotericsoftware.com/spine-runtime-architecture#Instance-objects">Instance objects</a> in the Spine
@@ -426,6 +429,50 @@ public class Skeleton {
 		System.arraycopy(slots.items, 0, drawOrder.items, 0, slots.size);
 		for (int i = 0, n = slots.size; i < n; i++)
 			slots.get(i).setToSetupPose();
+	}
+
+	/**
+	 * 根据boneDatas数据生成bone数据
+	 * @param boneDatas
+	 * @return
+	 */
+	public List<Bone> addNewBones(List<BoneData> boneDatas) {
+		List<Bone> newBones = new ArrayList<>();
+		for (int index = 0; index < boneDatas.size(); index ++) {
+			BoneData boneData = boneDatas.get(index);
+			Bone newBone;
+			if (boneData.parent == null) {
+				newBone = new Bone(boneData, this, null);
+			} else {
+				Bone parent = this.bones.get(boneData.parent.index);
+				newBone = new Bone(boneData, this, parent);
+				parent.children.add(newBone);
+			}
+			this.bones.add(newBone);
+			newBones.add(newBone);
+		}
+		return newBones;
+	}
+
+	/**
+	 * 生成新的Slot对象
+	 * @param slotDatas
+	 * @return
+	 */
+	public List<Slot> addNewSlots(List<SlotData> slotDatas) {
+		List<Slot> newSlots = new ArrayList<>();
+		for (int index = 0; index < slotDatas.size(); index ++) {
+			SlotData slotData = slotDatas.get(index);
+			Bone bone = getBones().get(slotData.boneData.index);
+			Slot slot = new Slot(slotData, bone);
+			this.slots.insert(slot.data.index, slot);
+			newSlots.add(slot);
+		}
+		drawOrder = new Array(this.slots.size);
+		for (Slot slot : this.slots) {
+			drawOrder.add(slot);
+		}
+		return newSlots;
 	}
 
 	/** The skeleton's setup pose data. */

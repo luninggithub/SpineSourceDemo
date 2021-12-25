@@ -1,0 +1,33 @@
+action.png
+size: 165, 28
+format: RGBA4444
+filter: Linear,Linear
+repeat: none
+Lefthand
+  rotate: true
+  xy: 70, 0
+  size: 28, 35
+  orig: 28, 35
+  offset: 0, 0
+  index: 2
+Mouth_dance_00
+  rotate: false
+  xy: 0, 0
+  size: 55, 26
+  orig: 55, 26
+  offset: 0, 0
+  index: 0
+Mouth_dance_01
+  rotate: true
+  xy: 55, 0
+  size: 25, 15
+  orig: 25, 15
+  offset: 0, 0
+  index: 1
+Righthand
+  rotate: false
+  xy: 105, 0
+  size: 60, 19
+  orig: 60, 19
+  offset: 0, 0
+  index: 3

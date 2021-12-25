@@ -69,6 +69,7 @@ import com.esotericsoftware.spine.attachments.MeshAttachment;
 import com.esotericsoftware.spine.attachments.PathAttachment;
 import com.esotericsoftware.spine.attachments.PointAttachment;
 import com.esotericsoftware.spine.attachments.RegionAttachment;
+import com.esotericsoftware.spine.attachments.SkeletonAttachment;
 import com.esotericsoftware.spine.attachments.VertexAttachment;
 
 import java.util.ArrayList;
@@ -146,7 +147,126 @@ public class SkeletonJson {
 			}
 			dataList.add(new Dress(slotEntry.name, index, attachName));
 		}
+		for (int index = 0, meshSize = this.linkedMeshes.size; index < meshSize; index++) {
+			LinkedMesh linkedMesh = this.linkedMeshes.get(index);
+			Skin meshSkin;
+			if (linkedMesh.skin == null) {
+				meshSkin = skelData.defaultSkin;
+			} else {
+				meshSkin = skelData.findSkin(linkedMesh.skin);
+			}
+			if (meshSkin == null) {
+				throw new SerializationException("Skin not found: " + linkedMesh.skin);
+			}
+			Attachment meshAtta = meshSkin.getAttachment(linkedMesh.slotIndex, linkedMesh.parent);
+			if (meshAtta == null) {
+				throw new SerializationException("Parent mesh not found: " + linkedMesh.parent);
+			}
+			linkedMesh.mesh.setParentMesh((MeshAttachment) meshAtta);
+		}
 		return dataList;
+	}
+
+	/**
+	 * 整个动作切换，动作文件中有新增骨骼的情况
+	 * @param skelData
+	 * @param boneArray
+	 * @return
+	 */
+	public List<BoneData> addNewBoneDatas(SkeletonData skelData, JsonValue boneArray) {
+		List<BoneData> boneDatas = new ArrayList<>();
+		for (int index = 0; index < boneArray.size; index ++) {
+			JsonValue boneObj = boneArray.get(index);
+			String boneName = boneObj.getString("parent", null);
+			if (boneName == null) {
+				throw new SerializationException("Parent bone not found: " + boneObj.toString());
+			}
+			BoneData boneData = skelData.findBone(boneName);
+			BoneData newBoneData = new BoneData(skelData.bones.size, boneObj.getString("name"), boneData);
+			newBoneData.length = boneObj.getFloat("length", 0) * this.scale;
+			newBoneData.x = boneObj.getFloat("x", 0) * this.scale;
+			newBoneData.y = boneObj.getFloat("y", 0) * this.scale;
+			newBoneData.rotation = boneObj.getFloat("rotation", 0);
+			newBoneData.scaleX = boneObj.getFloat("scaleX", 1);
+			newBoneData.scaleY = boneObj.getFloat("scaleY", 1);
+			newBoneData.shearX = boneObj.getFloat("shearX", 0);
+			newBoneData.shearY = boneObj.getFloat("shearY", 0);
+			String transformMode = boneObj.getString("transform", "normal");
+			newBoneData.transformMode = TransformMode.valueOf(transformMode);
+			skelData.bones.add(newBoneData);
+			boneDatas.add(newBoneData);
+		}
+		return boneDatas;
+	}
+
+
+	/**
+	 * 添加新的slot数据
+	 * @param skelData
+	 * @param slotArray
+	 * @return
+	 */
+	public List<SlotData> addNewSlotDatas(SkeletonData skelData, JsonValue slotArray) {
+		List<SlotData> slotDatas = new ArrayList<>();
+		Array<Skin> skins = skelData.getSkins();
+		Array<Skin> defaultSkins = new Array<>();
+		for (Skin skin : skins) {
+			if (skin.name.equals("default")) {
+				defaultSkins.add(skin);
+			}
+		}
+		Skin skin = defaultSkins.get(0);
+		for (int index = 0; index < slotArray.size; index ++) {
+			JsonValue slotObj = slotArray.get(index);
+			String name = slotObj.getString("name");
+			String bone = slotObj.getString("bone");
+			BoneData boneData = skelData.findBone(bone);
+			if (boneData == null) {
+				throw new SerializationException("Slot bone not found: " + slotObj.toString());
+			}
+			int slotIndex = slotObj.getInt("index");
+			SlotData newSlotData = new SlotData(slotIndex, name, boneData);
+			String color = slotObj.getString("color", null);
+			if (color != null) {
+				// TODO 有待验证
+				newSlotData.color.set(android.graphics.Color.parseColor(color));
+			}
+			String darkColor = slotObj.getString("dark", null);
+			if (darkColor != null) {
+				// TODO 有待验证
+				newSlotData.setDarkColor(new Color(android.graphics.Color.parseColor(darkColor)));
+			}
+			String attachmentName = slotObj.getString("attachment", null);
+			newSlotData.setAttachmentName(attachmentName);
+			String blendMode = slotObj.getString("blend", "normal");
+			newSlotData.setBlendMode(BlendMode.valueOf(blendMode));
+			slotDatas.add(newSlotData);
+			skelData.getSlots().insert(slotIndex, newSlotData);
+			for (Skin.Key key : skin.attachments.keys()) {
+				if (key.slotIndex >= slotIndex) {
+					key.slotIndex ++;
+				}
+			}
+			skin.addAttachment(slotIndex, "newAdded", new SkeletonAttachment("newAdded"));
+		}
+		for (int i = 0; i < skelData.getSlots().size; i ++) {
+			skelData.getSlots().get(i).index = i;
+		}
+		return slotDatas;
+	}
+
+	/**
+	 * 更新动作
+	 * @param skelData
+	 * @param animations
+	 */
+	public void updateAnimation(SkeletonData skelData, JsonValue animations) {
+		if (skelData.animations.size == 0) {
+			for (JsonValue slotEntry = animations.child; slotEntry != null; slotEntry = slotEntry.next) {
+				String name = slotEntry.name;
+				readAnimation(slotEntry, name, skelData);
+			}
+		}
 	}
 
 	public SkeletonData readSkeletonData (FileHandle file) {

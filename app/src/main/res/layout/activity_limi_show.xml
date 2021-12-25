@@ -9,12 +9,12 @@
     android:orientation="vertical">
 
     <Button
-        android:id="@+id/btn_man"
+        android:id="@+id/btn_show"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         android:background="@android:color/holo_green_light"
-        android:text="Man"
+        android:text="秀起来"
         android:textColor="@android:color/white" />
 
     <Button

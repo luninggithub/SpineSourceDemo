@@ -12,22 +12,24 @@ import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
 import com.baidu.duer.spine.R;
 import com.baidu.duer.spine.model.LimiShow2;
+import com.baidu.duer.spine.util.LogUtil;
 
 
 public class LimiShowActivity extends AndroidApplication {
+    private static final String TAG = "LimiShowActivity";
 
     LimiShow2 limiShow;
     View limiShowView;
 
-    Button btnMan, btnWoman;
+    Button btnShow, btnWoman;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_limi_show);
 
-        btnMan = (Button) findViewById(R.id.btn_man);
-        btnMan.setOnClickListener(vOnClickListener);
+        btnShow = (Button) findViewById(R.id.btn_show);
+        btnShow.setOnClickListener(vOnClickListener);
 
         btnWoman = (Button) findViewById(R.id.btn_woman);
         btnWoman.setOnClickListener(vOnClickListener);
@@ -74,7 +76,7 @@ public class LimiShowActivity extends AndroidApplication {
         });
         layoutParams.type = WindowManager.LayoutParams.TYPE_APPLICATION;
         layoutParams.flags = 40;
-        layoutParams.width = dp2Px(500);
+        layoutParams.width = dp2Px(300);
         layoutParams.height = dp2Px(500);
         layoutParams.format = -3;
         windowManager.addView(limiShowView, layoutParams);
@@ -88,6 +90,10 @@ public class LimiShowActivity extends AndroidApplication {
     View.OnClickListener vOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
+            if (view.getId() == R.id.btn_show) {
+                LogUtil.i(TAG, "Show button is clicked!");
+                limiShow.changeAction();
+            }
         }
     };
 

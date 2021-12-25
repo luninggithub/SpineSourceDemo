@@ -33,7 +33,7 @@ import com.badlogic.gdx.graphics.Color;
 
 /** Stores the setup pose for a {@link Slot}. */
 public class SlotData {
-	final int index;
+	int index;
 	final String name;
 	final BoneData boneData;
 	final Color color = new Color(1, 1, 1, 1);
